@@ -1,9 +1,40 @@
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= isset($meta['title']) ? $meta['title'] : 'harcourts.co.id' ?></title>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.css">
-<link rel="icon" href="<?php echo base_url(); ?>assets/img/admin-logo.png" type="image/gif">
-<script src="<?php echo base_url(); ?>assets/js/jquery-2.1.3.min.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+<div class="preloader">
+    <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+    </svg>
+</div>
+<div id="main-wrapper">
+    <header class="topbar">
+        <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="<?= site_url('report') ?>">
+                    <b>
+                        <img src="<?php echo base_url(); ?>assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                    </b>
+                    <span>
+                        <img src="<?php echo base_url(); ?>assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                    </span>
+                </a>
+            </div>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto mt-md-0 ">
+                    <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                    <li class="nav-item hidden-sm-down">
+                        <!-- <form class="app-search p-l-20"> -->
+                            <!-- <input type="text" class="form-control" placeholder="Search for...">  -->
+                            <!-- <a class="srh-btn"><i class="ti-search"></i></a> -->
+                        <!-- </form> -->
+                    </li>
+                </ul>
+                <ul class="navbar-nav my-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/assets/images/users/1.jpg" alt="user" class="profile-pic m-r-5" />Markarn Doe</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <?php $this->load->view('_partials/navbar.php'); ?>
+    
+</div>
