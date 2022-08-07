@@ -28,7 +28,7 @@
                 </ul>
                 <ul class="navbar-nav my-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/assets/images/users/1.jpg" alt="user" class="profile-pic m-r-5" /><?= isset($meta['user']) ? $meta['user'] : 'Administrator' ?></a>
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/assets/images/users/1.jpg" alt="user" class="profile-pic m-r-5" /><?= isset($meta['user']) ? $meta['user'] : 'User' ?></a>
                     </li>
                 </ul>
             </div>

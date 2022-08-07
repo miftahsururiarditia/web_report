@@ -6,7 +6,10 @@ class Report extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model('login_model');
+        $this->load->model('auth_model');
+        if (!$this->auth_model->current_user()) {
+            redirect('login');
+        }
     }
 
     public function index()

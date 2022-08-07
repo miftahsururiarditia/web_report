@@ -16,14 +16,14 @@
                         <h3 class="panel-title">Login</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form" method="post" action="<?php echo base_url(); ?>login/cek_user">
+                        <form role="form" method="post" action="<?php echo base_url(); ?>login">
                             <fieldset>
                                 <?php if($this->session->flashdata('info')): ?>
                                     <div class="alert alert-danger"><center><?php echo $this->session->flashdata('info'); ?></center></div>
                                 <?php endif; ?>
                                 <div class="input-group" style="margin-bottom:5%">
                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input class="form-control" placeholder="Username" name="user" type="text" autofocus>
+                                    <input class="form-control" placeholder="Email" name="email" type="text" autofocus>
                                 </div>
                                 <div class="input-group" style="margin-bottom:5%">
                                     <span class="input-group-addon"><i class="fa fa-lock"></i></span>
