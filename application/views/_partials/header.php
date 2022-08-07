@@ -7,7 +7,7 @@
     <header class="topbar">
         <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
             <div class="navbar-header">
-                <a class="navbar-brand" href="<?= site_url('report') ?>">
+                <a class="navbar-brand" href="<?= site_url('all_report') ?>">
                     <b>
                         <img src="<?php echo base_url(); ?>assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                     </b>
@@ -28,7 +28,7 @@
                 </ul>
                 <ul class="navbar-nav my-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/assets/images/users/1.jpg" alt="user" class="profile-pic m-r-5" />Markarn Doe</a>
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo base_url(); ?>assets/assets/images/users/1.jpg" alt="user" class="profile-pic m-r-5" /><?= isset($meta['user']) ? $meta['user'] : 'Administrator' ?></a>
                     </li>
                 </ul>
             </div>

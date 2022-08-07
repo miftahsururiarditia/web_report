@@ -12,7 +12,7 @@ class Login extends CI_Controller {
 		$this->load->view('login_page');
 	}
 
-    public function cek_user(){
+    public function cek_user() {
 		$user = $this->input->post('user');
 		$pass = $this->input->post('pass');
         $cek = $this->login_model->cek_user($user, $pass);
@@ -29,5 +29,9 @@ class Login extends CI_Controller {
 			$this->session->set_flashdata('info', 'User atau Password salah!');
 			redirect('login');
 		}
-	}	
+	}
+	
+	public function logout() {
+		$this->load->view('login_page');
+	}
 }
