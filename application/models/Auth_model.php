@@ -27,7 +27,6 @@ class Auth_model extends CI_Model {
 		$result = $user->row();
 
 		if (!$result) {
-			echo 'result empty!';
 			return FALSE;
 		}
 

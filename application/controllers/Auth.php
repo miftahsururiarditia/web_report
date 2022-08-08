@@ -16,7 +16,6 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules($rules);
 
 		if ($this->form_validation->run() == FALSE) {
-			echo "false";
 			return $this->load->view('login_page');
 		}
 
@@ -26,26 +25,10 @@ class Auth extends CI_Controller {
 		if ($this->auth_model->login($email, $pass)) {
 			redirect('report');
 		} else {
-			$this->session->set_flashdata('message_login_error', 'Login Gagal, mohon periksa username dan password kembali!');
+			$this->session->set_flashdata('message_login_error', 'Login Gagal! Mohon periksa username dan password kembali!');
 		}
 
 		$this->load->view('login_page');
-		// $user = $this->input->post('email');
-		// $pass = $this->input->post('pass');
-        // $cek = $this->login_model->cek_user($user, $pass);
-		// if ($cek->num_rows() > 0) {
-		// 	$newdata = array(
-        //            'user' => $user,
-        //            'logged_in' => TRUE
-        //        );
-
-		// 	$this->session->set_userdata($newdata);
-		// 	redirect('dashboard');
-		// }
-		// else{
-		// 	$this->session->set_flashdata('info', 'User atau Password salah!');
-		// 	redirect('login');
-		// }
 	}
 	
 	public function logout() {
