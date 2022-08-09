@@ -5,7 +5,7 @@
 </div>
 <div id="main-wrapper">
     <header class="topbar">
-        <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
+        <nav class="navbar top-navbar navbar-expand-md navbar-light">
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?= site_url('all_report') ?>">
                     <b>
