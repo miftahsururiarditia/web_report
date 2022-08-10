@@ -17,34 +17,36 @@
                             <h7 class="card-title mb-0">Filter Data</h7>
                         </div>
                         <div class="card-body">
-                        <div class="row">
-                            <!-- <form method="POST" action="<?php echo base_url(); ?>index.php/report">  -->
-                                <div class="col-lg-6">
+                            <form method="GET" action="<?php echo base_url(); ?>index.php/report"> 
+                            <div class="row">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Tgl Awal</label>
-                                        <div class="input-group date">
+                                        <div class="input-group date datepicker">
                                             <div class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </div>
-                                            <input placeholder="" type="text" class="form-control datepicker" name="tgl_awal">
+                                            <input placeholder="" type="text" class="form-control" name="tgl_awal" value="<?php echo $tgl_awal; ?>">
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                     <label>Tgl Akhir</label>
-                                        <div class="input-group date">
+                                        <div class="input-group date datepicker2">
                                             <div class="input-group-addon">
                                                 <span class="fa fa-calendar"></span>
                                             </div>
-                                            <input placeholder="" type="text" class="form-control datepicker2" name="tgl_akhir">
+                                            <input placeholder="" type="text" class="form-control" name="tgl_akhir" value="<?php echo $tgl_akhir; ?>">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit">Apply</button>
-                            <!-- </form> -->
+                            <button class="btn btn-primary" type="submit">Apply Filter</button>
+                            </form>
                             <br>
                             <div class="pull-right">
-                                <a href="<?php echo base_url(); ?>index.php/report/export" class="btn btn-success" style="padding-right: 10px">
+                                <a href="<?php echo base_url().'index.php/report/export/'.$tgl_awal.'/'.$tgl_akhir; ?>" class="btn btn-success" style="padding-right: 10px">
                                     <i class="fa fa-file-excel-o"></i>
                                     Export Data
                                 </a>
@@ -112,7 +114,7 @@
         minView: 'month',
         autoclose: true,
         todayBtn: true,
-        pickerPosition: "bottom-left"
+        pickerPosition: "bottom-right"
     });
 
     $(".datepicker2").datetimepicker({
@@ -121,7 +123,7 @@
         minView: 'month',
         autoclose: true,
         todayBtn: true,
-        pickerPosition: "bottom-left"
+        pickerPosition: "bottom-right"
     });
   })
 </script> 

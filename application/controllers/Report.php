@@ -16,9 +16,12 @@ class Report extends CI_Controller {
 
 	public function index() {
 		$this->load->library('pagination');
+		$data = array();
 
 		$limit_per_page = 100;
 		$offset = html_escape($this->input->get('per_page'));
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
 		$result = $this->report_model->get_data($limit_per_page, $offset);
 		$count = $this->report_model->get_count_data()->jumlah;
 		$data['result'] = $result;
@@ -68,7 +71,7 @@ class Report extends CI_Controller {
         $this->load->view('ina_sales_consultant', $data);
     }
 
-	public function export() {
+	public function export($tgl_awal, $tgl_akhir) {
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();    
 		
@@ -215,7 +218,7 @@ class Report extends CI_Controller {
 
 		// $limit_per_page = 100;
 		// $offset = html_escape($this->input->get('per_page'));
-		$datum = $this->report_model->get_data_export();
+		$datum = $this->report_model->get_data_export($tgl_awal, $tgl_akhir);
 		
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$numrow = 8; // Set baris pertama untuk isi tabel adalah baris ke 4

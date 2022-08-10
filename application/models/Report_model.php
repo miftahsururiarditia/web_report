@@ -14,7 +14,7 @@ class Report_model extends CI_Model {
 		return $sql->row();
 	}
 
-	public function get_data_export() {
+	public function get_data_export($tgl_awal, $tgl_akhir) {
 		$sql = $this->db->query("SELECT b.organisational_unit_name as sales_listing, COALESCE(c.user_nicename, '') as sales_selling, b.organisational_unit_name as harcourts_office,
 		b.property_address as alamat_property, CASE WHEN b.jenis_listing = 'Jual' THEN 'X' ELSE '' END as tipe_jual, 
 		CASE WHEN b.jenis_listing = 'Sewa' THEN 'X' ELSE '' END as tipe_sewa, b.property_price as include_ppn
@@ -32,7 +32,7 @@ class Report_model extends CI_Model {
 			GROUP BY post_id
 		) b ON a.ID = b.post_id
 		LEFT JOIN wpgy_users c ON b.property_agent = c.ID
-		WHERE DATE(a.post_date) = '2022-06-05' AND a.post_type = 'estate_property'");
+		WHERE DATE(a.post_date) BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."' AND a.post_type = 'estate_property'");
 
 		return $sql->result();
 	}
