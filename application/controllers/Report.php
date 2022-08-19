@@ -18,7 +18,7 @@ class Report extends CI_Controller {
 		$this->load->library('pagination');
 		$data = array();
 
-		$limit_per_page = 100;
+		$limit_per_page = 10;
 		$offset = html_escape($this->input->get('per_page'));
 		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
 		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
@@ -43,30 +43,125 @@ class Report extends CI_Controller {
 
 	public function total_unit()
     {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_total_unit($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
+		$count = $this->report_model->get_count_data_total_unit($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/total_unit');
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
         $data['meta'] = ['title' => 'Total Unit', 'user' => 'Administrator'];
         $this->load->view('total_unit', $data);
     }
 
     public function grosscom_sales_consultant()
     {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_grosscom($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
+		$count = $this->report_model->get_count_data_grosscom($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/grosscom_sales_consultant');
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
         $data['meta'] = ['title' => 'Grosscom Sales Consultant', 'user' => 'Administrator'];
         $this->load->view('grosscom_sales_consultant', $data);
     }
 
     public function ina_office_revenue()
     {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/ina_office_revenue');
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
         $data['meta'] = ['title' => 'Ina Office Revenue', 'user' => 'Administrator'];
         $this->load->view('ina_office_revenue', $data);
     }
 
     public function ina_principal_report()
     {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/ina_principal_report');
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
         $data['meta'] = ['title' => 'Ina Principal Report', 'user' => 'Administrator'];
         $this->load->view('ina_principal_report', $data);
     }
 
     public function ina_sales_consultant()
     {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/ina_sales_consultant');
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
         $data['meta'] = ['title' => 'Ina Sales Consultant', 'user' => 'Administrator'];
         $this->load->view('ina_sales_consultant', $data);
     }

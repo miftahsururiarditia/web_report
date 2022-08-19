@@ -8,11 +8,11 @@
         <nav class="navbar top-navbar navbar-expand-md navbar-light">
             <div class="navbar-header">
                 <a class="navbar-brand" href="<?= site_url('all_report') ?>">
-                    <b>
+                    <!-- <b>
                         <img src="<?php echo base_url(); ?>assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                    </b>
+                    </b> -->
                     <span>
-                        <img src="<?php echo base_url(); ?>assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                        <img src="<?php echo base_url(); ?>assets/assets/images/logo_navy.png" alt="homepage" class="dark-logo" />
                     </span>
                 </a>
             </div>
