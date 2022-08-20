@@ -6,8 +6,46 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/colors/blue.css" id="theme">
 <link rel="icon" href="<?php echo base_url(); ?>assets/img/admin-logo.png" type="image/gif">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<style>
+    .navbar-nav-cust {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+        align-items: flex-end;
+    }
+
+    .my-lg-0-cust {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .nav-link-cust {
+        display: block;
+        padding: 0.1em 0.1em;
+    }
+
+    .nav-link-sub-cust {
+        display: block;
+        margin-top: -8px;
+        margin-right: 3px;
+    }
+
+    .text-white-cust {
+        color: #fff !important;
+        font-size: 15px;
+    }
+    .text-white-sub-cust {
+        color: #606060 !important;
+        font-size: 12px;
+    }
+</style>
