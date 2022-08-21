@@ -5,7 +5,12 @@ class Auth extends CI_Controller {
 
 	public function index()
 	{
-		show_404();
+		$this->load->model('auth_model');
+		if ($this->auth_model->current_user()) {
+            redirect('report');
+        } else {
+			$this->login();
+		}
 	}
 
     public function login() {
@@ -34,6 +39,6 @@ class Auth extends CI_Controller {
 	public function logout() {
 		$this->load->model('auth_model');
 		$this->auth_model->logout();
-		redirect('login');
+		$this->login();
 	}
 }

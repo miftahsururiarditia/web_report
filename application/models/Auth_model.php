@@ -1,16 +1,18 @@
-<?php 
+<?php
 
-class Auth_model extends CI_Model {
+class Auth_model extends CI_Model
+{
 
 	const SESSION_KEY = 'user_id';
 
-	public function rules() {
+	public function rules()
+	{
 		return [
 			[
 				'field' => 'email',
 				'label' => 'Email',
 				'rules' => 'required|valid_email|max_length[32]',
-			], 
+			],
 			[
 				'field' => 'pass',
 				'label' => 'Password',
@@ -19,7 +21,8 @@ class Auth_model extends CI_Model {
 		];
 	}
 
-	public function login($email, $pass){
+	public function login($email, $pass)
+	{
 		$this->db->where('user_email', $email);
 		$encrypted_pass = md5($pass);
 		$this->db->where('user_pass', $encrypted_pass, NULL, FALSE);
@@ -27,26 +30,106 @@ class Auth_model extends CI_Model {
 		$result = $user->row();
 
 		if (!$result) {
-			return FALSE;
+			return false;
 		}
 
-		$this->session->set_userdata([self::SESSION_KEY => $result->ID]);
+		$user_role = $this->check_role($result->ID, $email);
 
-		return $this->session->has_userdata(self::SESSION_KEY);
+		echo 'role : ' . $user_role;
+		if ($user_role !== 0) {
+			$login_data = array(
+				'username' => $result->user_nicename,
+				'user_id' => $result->ID,
+				'user_role' => $user_role,
+				'user_email' => $email
+			);
+			$this->session->set_userdata('session_data', $login_data);
+		}
+		return $this->session->has_userdata('session_data');
 	}
 
-	public function current_user() {
-		if (!$this->session->has_userdata(self::SESSION_KEY)) {
+	function isAdmin($id)
+	{
+		$whitelist_admin = array('13185', '13187', '13461', '13597', '13985', '123456789000');
+
+		if (in_array($id, $whitelist_admin, TRUE)) {
+			return true;
+		}
+		return false;
+	}
+
+	function isAgency($email)
+	{
+		$this->db->where('meta_key', 'agency_email');
+		$this->db->where('meta_value', $email);
+		$postmeta = $this->db->get('wpgy_postmeta');
+		$result_postmeta = $postmeta->row();
+
+		if ($result_postmeta) {
+			$this->db->where('ID', $result_postmeta->post_id);
+			$posts = $this->db->get('wpgy_posts');
+			$result_posts = $posts->row();
+
+			if ($result_posts) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function isAgent($email)
+	{
+		$this->db->where('meta_key', 'agent_email');
+		$this->db->where('meta_value', $email);
+		$postmeta = $this->db->get('wpgy_postmeta');
+		$result_postmeta = $postmeta->row();
+
+		if ($result_postmeta) {
+			$this->db->where('ID', $result_postmeta->post_id);
+			$posts = $this->db->get('wpgy_posts');
+			$result_posts = $posts->row();
+
+			if ($result_posts) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function check_role($id, $email)
+	{
+		$is_admin = $this->isAdmin($id);
+		if ($is_admin) {
+			return '1';
+		} else {
+			$is_agency = $this->isAgency($email);
+			if ($is_agency) {
+				return '2';
+			} else {
+				$is_agent = $this->isAgent($email);
+				if ($is_agent) {
+					return '3';
+				}
+			}
+		}
+
+		return '0';
+	}
+
+	public function current_user()
+	{
+		if (!$this->session->has_userdata('session_data')) {
 			return null;
 		}
 
-		$user_id = $this->session->userdata(self::SESSION_KEY);
-		$query = $this->db->get_where('wpgy_users', ['ID' => $user_id]);
-		return $query->row();
+		return $this->session->has_userdata('session_data');
 	}
 
-	public function logout() {
-		$this->session->unset_userdata(self::SESSION_KEY);
-		return !$this->session->has_userdata(self::SESSION_KEY);
+	public function logout()
+	{
+		$this->session->unset_userdata('session_data');
+		return !$this->session->has_userdata('session_data');
 	}
 }
