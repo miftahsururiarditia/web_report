@@ -5,28 +5,54 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Report extends CI_Controller {
+	private $USER_ID;
+	private $ROLE_ID;
+	private $USER_ROLE;
+	private $USER_NAME;
+
     function __construct(){
 		parent::__construct();
 		$this->load->model('report_model');
 		$this->load->model('auth_model');
         if (!$this->auth_model->current_user()) {
             redirect('login');
-        }
+        } else {
+			$login_data = $this->session->userdata('session_data');
+
+			$role_data = array (
+				'1' => 'Admin', 
+				'2' => 'Agency',
+				'3' => 'Agent'
+			);
+
+			$this->USER_ID = $login_data['user_id'];
+			$this->ROLE_ID = $login_data['user_role'];
+			$this->USER_ROLE = $role_data[$login_data['user_role']];
+			$this->USER_NAME = $login_data['username'];
+		}
+		ini_set('memory_limit', '512M');
 	}
 
 	public function index() {
+		$data = array();
+
+		$data['meta'] = ['title' => 'Home', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
+        $this->load->view('home', $data);
+	}
+
+	public function all_report() {
 		$this->load->library('pagination');
 		$data = array();
 
 		$limit_per_page = 10;
-		$offset = html_escape($this->input->get('per_page'));
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
 		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
 		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data($limit_per_page, $offset);
-		$count = $this->report_model->get_count_data()->jumlah;
+		$result = $this->report_model->get_all_report_data($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_all_report_data($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		$data['result'] = $result;
 
-		$config['base_url'] = site_url('/report');
+		$config['base_url'] = site_url('/report?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
 		$config['page_query_string'] = TRUE;
 		$config['total_rows'] = $count;
 		$config['per_page'] = $limit_per_page;
@@ -37,9 +63,34 @@ class Report extends CI_Controller {
 		
 		// $this->load->view('report_page', $data);
 
-		$data['meta'] = ['title' => 'All Report', 'user' => 'Administrator'];
+		$data['meta'] = ['title' => 'All Report', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
         $this->load->view('all_report', $data);
 	}
+
+	public function grosscom_sales_consultant()
+    {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_grosscom($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_data_grosscom($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/grosscom_sales_consultant?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
+        $data['meta'] = ['title' => 'Grosscom Sales Consultant', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
+        $this->load->view('grosscom_sales_consultant', $data);
+    }
 
 	public function total_unit()
     {
@@ -50,11 +101,11 @@ class Report extends CI_Controller {
 		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
 		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
 		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data_total_unit($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
-		$count = $this->report_model->get_count_data_total_unit($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$result = $this->report_model->get_data_total_unit($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_data_total_unit($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		$data['result'] = $result;
 
-		$config['base_url'] = site_url('/report/total_unit');
+		$config['base_url'] = site_url('/report/total_unit?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
 		$config['page_query_string'] = TRUE;
 		$config['total_rows'] = $count;
 		$config['per_page'] = $limit_per_page;
@@ -62,33 +113,8 @@ class Report extends CI_Controller {
   		$config['full_tag_close'] = '</div>';
 
 		$this->pagination->initialize($config);
-        $data['meta'] = ['title' => 'Total Unit', 'user' => 'Administrator'];
+        $data['meta'] = ['title' => 'Total Unit', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
         $this->load->view('total_unit', $data);
-    }
-
-    public function grosscom_sales_consultant()
-    {
-		$this->load->library('pagination');
-		$data = array();
-
-		$limit_per_page = 10;
-		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
-		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
-		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data_grosscom($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
-		$count = $this->report_model->get_count_data_grosscom($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
-		$data['result'] = $result;
-
-		$config['base_url'] = site_url('/report/grosscom_sales_consultant');
-		$config['page_query_string'] = TRUE;
-		$config['total_rows'] = $count;
-		$config['per_page'] = $limit_per_page;
-		$config['full_tag_open'] = '<div class="pagination">';
-  		$config['full_tag_close'] = '</div>';
-
-		$this->pagination->initialize($config);
-        $data['meta'] = ['title' => 'Grosscom Sales Consultant', 'user' => 'Administrator'];
-        $this->load->view('grosscom_sales_consultant', $data);
     }
 
     public function ina_office_revenue()
@@ -100,11 +126,11 @@ class Report extends CI_Controller {
 		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
 		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
 		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
-		$count = $this->report_model->get_count_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$result = $this->report_model->get_data_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_office_revenue($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		$data['result'] = $result;
 
-		$config['base_url'] = site_url('/report/ina_office_revenue');
+		$config['base_url'] = site_url('/report/ina_office_revenue?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
 		$config['page_query_string'] = TRUE;
 		$config['total_rows'] = $count;
 		$config['per_page'] = $limit_per_page;
@@ -112,33 +138,8 @@ class Report extends CI_Controller {
   		$config['full_tag_close'] = '</div>';
 
 		$this->pagination->initialize($config);
-        $data['meta'] = ['title' => 'Ina Office Revenue', 'user' => 'Administrator'];
+        $data['meta'] = ['title' => 'Ina Office Revenue', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
         $this->load->view('ina_office_revenue', $data);
-    }
-
-    public function ina_principal_report()
-    {
-		$this->load->library('pagination');
-		$data = array();
-
-		$limit_per_page = 10;
-		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
-		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
-		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
-		$count = $this->report_model->get_count_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
-		$data['result'] = $result;
-
-		$config['base_url'] = site_url('/report/ina_principal_report');
-		$config['page_query_string'] = TRUE;
-		$config['total_rows'] = $count;
-		$config['per_page'] = $limit_per_page;
-		$config['full_tag_open'] = '<div class="pagination">';
-  		$config['full_tag_close'] = '</div>';
-
-		$this->pagination->initialize($config);
-        $data['meta'] = ['title' => 'Ina Principal Report', 'user' => 'Administrator'];
-        $this->load->view('ina_principal_report', $data);
     }
 
     public function ina_sales_consultant()
@@ -150,11 +151,11 @@ class Report extends CI_Controller {
 		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
 		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
 		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
-		$result = $this->report_model->get_data_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'], $limit_per_page, $offset);
-		$count = $this->report_model->get_count_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'])->jumlah;
+		$result = $this->report_model->get_data_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_sales_consultant($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		$data['result'] = $result;
 
-		$config['base_url'] = site_url('/report/ina_sales_consultant');
+		$config['base_url'] = site_url('/report/ina_sales_consultant?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
 		$config['page_query_string'] = TRUE;
 		$config['total_rows'] = $count;
 		$config['per_page'] = $limit_per_page;
@@ -162,11 +163,36 @@ class Report extends CI_Controller {
   		$config['full_tag_close'] = '</div>';
 
 		$this->pagination->initialize($config);
-        $data['meta'] = ['title' => 'Ina Sales Consultant', 'user' => 'Administrator'];
+        $data['meta'] = ['title' => 'Ina Sales Consultant', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
         $this->load->view('ina_sales_consultant', $data);
     }
 
-	public function export($tgl_awal, $tgl_akhir) {
+	public function ina_principal_report()
+    {
+		$this->load->library('pagination');
+		$data = array();
+
+		$limit_per_page = 10;
+		$offset = $this->input->get('per_page') ? html_escape($this->input->get('per_page')) : 0;
+		$data['tgl_awal'] = $this->input->get('tgl_awal') == '' ? date("Y-m-d") : $this->input->get('tgl_awal');
+		$data['tgl_akhir'] = $this->input->get('tgl_akhir') == '' ? date("Y-m-d") : $this->input->get('tgl_akhir');
+		$result = $this->report_model->get_data_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'], FALSE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME, $limit_per_page, $offset);
+		$count = $this->report_model->get_count_ina_principal_report($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		$data['result'] = $result;
+
+		$config['base_url'] = site_url('/report/ina_principal_report?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
+		$config['page_query_string'] = TRUE;
+		$config['total_rows'] = $count;
+		$config['per_page'] = $limit_per_page;
+		$config['full_tag_open'] = '<div class="pagination">';
+  		$config['full_tag_close'] = '</div>';
+
+		$this->pagination->initialize($config);
+        $data['meta'] = ['title' => 'Ina Principal Report', 'user' => $this->USER_NAME, 'role' => $this->USER_ROLE];
+        $this->load->view('ina_principal_report', $data);
+    }
+
+	public function all_report_export($tgl_awal, $tgl_akhir) {
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();    
 		
@@ -313,7 +339,7 @@ class Report extends CI_Controller {
 
 		// $limit_per_page = 100;
 		// $offset = html_escape($this->input->get('per_page'));
-		$datum = $this->report_model->get_data_export($tgl_awal, $tgl_akhir);
+		$datum = $this->report_model->get_all_report_data($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$numrow = 8; // Set baris pertama untuk isi tabel adalah baris ke 4
@@ -429,11 +455,286 @@ class Report extends CI_Controller {
 		
 		// Proses file excel
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment; filename="Data Laporan.xlsx"'); // Set nama file excel nya
+		header('Content-Disposition: attachment; filename="All Report.xlsx"'); // Set nama file excel nya
 		// header('Cache-Control: max-age=0');
 		
 		$writer = new Xlsx($spreadsheet);
 		$writer->setPreCalculateFormulas(false);
 		$writer->save('php://output');
 	}
+
+	public function grosscom_sales_consultant_export($tgl_awal, $tgl_akhir) {
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();    
+		
+		$sheet->setCellValue('B1', "HARCOURTS INDONESIA");
+		$sheet->setCellValue('B2', "National Sales Consultant");
+		// $sheet->mergeCells('A1:E1'); // Set Merge Cell pada kolom A1 sampai E1
+		$sheet->getStyle('B1:B2')->getFont()->setBold(true); // Set bold kolom A1
+		
+		// Buat header tabel nya pada baris ke 3
+		$sheet->setCellValue('A5', "NO");
+		$sheet->setCellValue('B5', "Sales Consultant");
+		$sheet->setCellValue('C5', "Harcourts");
+		$sheet->setCellValue('D5', "Gross Com Jual");
+		$sheet->setCellValue('E5', "Gross Com Sewa");
+		$sheet->setCellValue('F5', "TOTAL");
+
+		$sheet->getStyle('A5:F5')->getFont()->setBold(true);
+
+		$datum = $this->report_model->get_data_grosscom($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 6; // Set baris pertama untuk isi tabel adalah baris ke 6
+
+		foreach($datum as $data) {
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->sales_consultant);
+			$sheet->setCellValue('C'.$numrow, $data->harcourts);
+			$sheet->setCellValue('D'.$numrow, $data->grosscom_jual);
+			$sheet->setCellValue('E'.$numrow, $data->grosscom_sewa);
+			$sheet->setCellValue('F'.$numrow, $data->total);
+			
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+
+		$sheet->setCellValue('C'.$numrow, 'Total');
+		$sheet->setCellValue('D'.$numrow, '=SUM(D6:D'.intval($numrow-1).')');
+		$sheet->setCellValue('E'.$numrow, '=SUM(E6:E'.intval($numrow-1).')');
+		$sheet->setCellValue('F'.$numrow, '=SUM(F6:F'.intval($numrow-1).')');
+		$sheet->getStyle('C'.$numrow.':F'.$numrow)->getFont()->setBold(true);
+		
+		// Set orientasi kertas jadi LANDSCAPE
+		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		
+		// Set judul file excel nya
+		$sheet->setTitle("GrossCom Sales Consultant");
+
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="GrossCom Sales Consultant.xlsx"'); // Set nama file excel nya
+		// header('Cache-Control: max-age=0');
+		
+		$writer = new Xlsx($spreadsheet);
+		$writer->setPreCalculateFormulas(false);
+		$writer->save('php://output');
+	}
+
+	public function total_unit_export($tgl_awal, $tgl_akhir) {
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();    
+		
+		$sheet->setCellValue('A1', "HARCOURTS INDONESIA");
+		$sheet->setCellValue('A2', "Total Unit");
+		$sheet->getStyle('A1:A2')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
+		$sheet->mergeCells('A2:F2'); // Set Merge Cell pada kolom A2 sampai F2
+		
+		// Buat header tabel nya pada baris ke 3
+		$sheet->setCellValue('A5', "NO");
+		$sheet->setCellValue('B5', "Sales Consultant");
+		$sheet->setCellValue('C5', "Harcourts");
+		$sheet->setCellValue('D5', "Unit Jual");
+		$sheet->setCellValue('E5', "Unit Sewa");
+		$sheet->setCellValue('F5', "TOTAL");
+
+		$sheet->getStyle('A5:F5')->getFont()->setBold(true);
+
+		$datum = $this->report_model->get_data_total_unit($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 6; // Set baris pertama untuk isi tabel adalah baris ke 6
+
+		foreach($datum as $data) {
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->sales_consultant);
+			$sheet->setCellValue('C'.$numrow, $data->harcourts);
+			$sheet->setCellValue('D'.$numrow, $data->unit_jual);
+			$sheet->setCellValue('E'.$numrow, $data->unit_sewa);
+			$sheet->setCellValue('F'.$numrow, $data->total);
+			
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+
+		$sheet->setCellValue('C'.$numrow, 'Total');
+		$sheet->setCellValue('D'.$numrow, '=SUM(D6:D'.intval($numrow-1).')');
+		$sheet->setCellValue('E'.$numrow, '=SUM(E6:E'.intval($numrow-1).')');
+		$sheet->setCellValue('F'.$numrow, '=SUM(F6:F'.intval($numrow-1).')');
+		$sheet->getStyle('C'.$numrow.':F'.$numrow)->getFont()->setBold(true);
+		
+		// Set orientasi kertas jadi LANDSCAPE
+		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		
+		// Set judul file excel nya
+		$sheet->setTitle("Total Unit");
+
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Total Unit.xlsx"'); // Set nama file excel nya
+		// header('Cache-Control: max-age=0');
+		
+		$writer = new Xlsx($spreadsheet);
+		$writer->setPreCalculateFormulas(false);
+		$writer->save('php://output');
+	}
+
+	public function ina_office_revenue_export($tgl_awal, $tgl_akhir) {
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();    
+		
+		$sheet->setCellValue('A1', "HARCOURTS INDONESIA - OFFICE BY REVENUE");
+		$sheet->setCellValue('A2', "Period $tgl_awal s/d $tgl_akhir");
+		$sheet->getStyle('A1:A2')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->mergeCells('A1:B1'); // Set Merge Cell pada kolom A1 sampai F1
+		$sheet->mergeCells('A2:B2'); // Set Merge Cell pada kolom A2 sampai F2
+		
+		// Buat header tabel nya pada baris ke 3
+		$sheet->setCellValue('A4', "NO");
+		$sheet->setCellValue('B4', "Harcourts");
+		$sheet->setCellValue('C4', "Rank");
+
+		$sheet->getStyle('A4:C4')->getFont()->setBold(true);
+
+		$datum = $this->report_model->get_data_ina_office_revenue($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 5; // Set baris pertama untuk isi tabel adalah baris ke 6
+
+		foreach($datum as $data) {
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->harcourts);
+			$sheet->setCellValue('C'.$numrow, '');
+			
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+		
+		// Set orientasi kertas jadi LANDSCAPE
+		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		
+		// Set judul file excel nya
+		$sheet->setTitle("Ina Office Revenue");
+
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Ina Office Revenue.xlsx"'); // Set nama file excel nya
+		// header('Cache-Control: max-age=0');
+		
+		$writer = new Xlsx($spreadsheet);
+		$writer->setPreCalculateFormulas(false);
+		$writer->save('php://output');
+	}
+
+	public function ina_sales_consultant_export($tgl_awal, $tgl_akhir) {
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();    
+		
+		$sheet->setCellValue('A1', "HARCOURTS INDONESIA - SALES CONSULTANT BY REVENUE");
+		$sheet->setCellValue('A2', "Period $tgl_awal s/d $tgl_akhir");
+		$sheet->getStyle('A1:A2')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->mergeCells('A1:E1');
+		$sheet->mergeCells('A2:E2');
+		
+		// Buat header tabel nya pada baris ke 3
+		$sheet->setCellValue('A4', "NO");
+		$sheet->setCellValue('B4', "Sales Consultant");
+		$sheet->setCellValue('C4', "Harcourts");
+		$sheet->setCellValue('D4', "Career Path");
+		$sheet->setCellValue('E4', "Rank");
+
+		$sheet->getStyle('A4:E4')->getFont()->setBold(true);
+
+		$datum = $this->report_model->get_data_ina_sales_consultant($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 5; // Set baris pertama untuk isi tabel adalah baris ke 6
+
+		foreach($datum as $data) {
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, $data->sales_consultant);
+			$sheet->setCellValue('C'.$numrow, $data->harcourts);
+			$sheet->setCellValue('D'.$numrow, '');
+			$sheet->setCellValue('E'.$numrow, '');
+			
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+		
+		// Set orientasi kertas jadi LANDSCAPE
+		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		
+		// Set judul file excel nya
+		$sheet->setTitle("Ina Sales Consultant");
+
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Ina Sales Consultant.xlsx"'); // Set nama file excel nya
+		// header('Cache-Control: max-age=0');
+		
+		$writer = new Xlsx($spreadsheet);
+		$writer->setPreCalculateFormulas(false);
+		$writer->save('php://output');
+	}	
+
+	public function ina_principal_report_export($tgl_awal, $tgl_akhir) {
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();    
+		
+		$sheet->setCellValue('A1', "HARCOURTS INDONESIA - PRINCIPAL BY REVENUE");
+		$sheet->setCellValue('A2', "Period $tgl_awal s/d $tgl_akhir");
+		$sheet->getStyle('A1:A2')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->mergeCells('A1:C1');
+		$sheet->mergeCells('A2:C2');
+		
+		// Buat header tabel nya pada baris ke 3
+		$sheet->setCellValue('A4', "NO");
+		$sheet->setCellValue('B4', "Principal Name");
+		$sheet->setCellValue('C4', "Harcourts");
+		$sheet->setCellValue('D4', "Rank");
+
+		$sheet->getStyle('A4:D4')->getFont()->setBold(true);
+
+		$datum = $this->report_model->get_data_ina_principal_report($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$numrow = 5; // Set baris pertama untuk isi tabel adalah baris ke 6
+
+		foreach($datum as $data) {
+			$sheet->setCellValue('A'.$numrow, $no);
+			$sheet->setCellValue('B'.$numrow, '');
+			$sheet->setCellValue('C'.$numrow, $data->harcourts);
+			$sheet->setCellValue('D'.$numrow, '');
+			
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
+		}
+		
+		// Set orientasi kertas jadi LANDSCAPE
+		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		
+		// Set judul file excel nya
+		$sheet->setTitle("Ina Principal Report");
+
+		$spreadsheet->setActiveSheetIndex(0);
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Ina Principal Report.xlsx"'); // Set nama file excel nya
+		// header('Cache-Control: max-age=0');
+		
+		$writer = new Xlsx($spreadsheet);
+		$writer->setPreCalculateFormulas(false);
+		$writer->save('php://output');
+	}
+
 }

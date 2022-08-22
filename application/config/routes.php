@@ -55,7 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['login'] = 'auth/login';
 $route['logout'] = 'auth/logout';
-$route['all_report'] = 'report';
+$route['home'] = 'report';
+$route['all_report'] = 'report/all_report';
 $route['total_unit'] = 'report/total_unit';
 $route['grosscom_sales_consultant'] = 'report/grosscom_sales_consultant';
 $route['ina_office_revenue'] = 'report/ina_office_revenue';

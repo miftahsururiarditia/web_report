@@ -8,7 +8,6 @@
 <link rel="icon" href="<?php echo base_url(); ?>assets/img/admin-logo.png" type="image/gif">
 <link href="<?php echo base_url(); ?>assets/report/css/pagination.css" rel="stylesheet">
 <link href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <style>
     .navbar-nav-cust {

@@ -12,10 +12,7 @@
             <h3>Ina Sales Consultant</h3>
             <div class="row">
                 <div class="col-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h7 class="card-title mb-0">Filter Data</h7>
-                        </div>
+                    <div class="card" style="padding: 10px;">
                         <div class="card-body">
                             <form method="GET" action="<?php echo base_url(); ?>index.php/ina_sales_consultant"> 
                             <div class="row">
@@ -60,9 +57,11 @@
                 <div class="col-12 col-lg-12">
                 <br>
                 <?=  $this->pagination->create_links(); ?>
+                    <div class="card">
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th scope='col'>NO</th>
                                 <th scope='col'>Sales Consultant</th>
                                 <th scope='col'>Harcourts</th>
                                 <th scope='col'>Career Path</th>
@@ -70,16 +69,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $i = 1; ?>
                             <?php foreach ($result as $key) { ?>
                                 <tr>
+                                    <td><?php echo $i; ?></td>
                                     <td><?php echo $key->sales_consultant; ?></td>
                                     <td><?php echo $key->harcourts; ?></td>
                                     <td><?php echo ""; ?></td>
                                     <td><?php echo ""; ?></td>
                                 </tr>
-                            <?php } ?>
+                            <?php $i++; } ?>
                         </tbody>
                     </table>
+                    </div>
                     <?=  $this->pagination->create_links(); ?>
                 </div>
             </div>
@@ -88,38 +90,5 @@
 
     <?php $this->load->view('_partials/footer.php'); ?>
 
-    <script src="<?php echo base_url(); ?>assets/js/jquery-2.1.3.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/plugins/jquery/jquery.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/plugins/bootstrap/js/tether.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/jquery.slimscroll.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/waves.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/sidebarmenu.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/custom.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap-datetimepicker.js"></script>
 </body>
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    $(".datepicker").datetimepicker({
-        format: "yyyy-mm-dd",
-        startView: 'month',
-        minView: 'month',
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-right"
-    });
-
-    $(".datepicker2").datetimepicker({
-        format: "yyyy-mm-dd",
-        startView: 'month',
-        minView: 'month',
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-right"
-    });
-  })
-</script> 
 </html>

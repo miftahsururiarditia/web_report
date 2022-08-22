@@ -115,7 +115,7 @@ class Auth_model extends CI_Model
 			}
 		}
 
-		return '0';
+		return '3';
 	}
 
 	public function current_user()

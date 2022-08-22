@@ -3,7 +3,7 @@
         <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
     </svg>
 </div>
-<div id="main-wrapper">
+<div id="main-wrapper" style="position: fixed; z-index: 50">
     <header class="topbar">
         <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
             <div class="navbar-header">
@@ -34,3 +34,5 @@
     <?php $this->load->view('_partials/navbar.php'); ?>
 
 </div>
+<br>
+<br>

@@ -3,6 +3,9 @@
 		<nav class="sidebar-nav">
 			<ul id="sidebarnav">
 				<li>
+					<a href="<?= site_url('report') ?>" class="waves-effect"><i class="fa fa-home m-r-10" aria-hidden="true"></i>Home</a>
+				</li>
+				<li>
 					<a href="<?= site_url('all_report') ?>" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>All Report</a>
 				</li>
 				<li>

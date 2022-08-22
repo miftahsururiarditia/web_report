@@ -12,10 +12,7 @@
             <h3>Total Unit</h3>
             <div class="row">
                 <div class="col-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h7 class="card-title mb-0">Filter Data</h7>
-                        </div>
+                    <div class="card" style="padding: 10px;">
                         <div class="card-body">
                             <form method="GET" action="<?php echo base_url(); ?>index.php/total_unit"> 
                             <div class="row">
@@ -60,6 +57,7 @@
                 <div class="col-12 col-lg-12">
                 <br>
                 <?=  $this->pagination->create_links(); ?>
+                    <div class="card">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -85,6 +83,7 @@
                             <?php $i++; } ?>
                         </tbody>
                     </table>
+                    </div>
                     <?=  $this->pagination->create_links(); ?>
                 </div>
             </div>
