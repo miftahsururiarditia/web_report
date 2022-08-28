@@ -24,10 +24,12 @@ class Auth_model extends CI_Model
 	public function login($email, $pass)
 	{
 		$this->db->where('user_email', $email);
-		$encrypted_pass = md5($pass);
-		$this->db->where('user_pass', $encrypted_pass, NULL, FALSE);
 		$user = $this->db->get('wpgy_users');
 		$result = $user->row();
+
+		if (!password_verify($pass, $result->user_pass)) {
+			return false;
+		}
 
 		if (!$result) {
 			return false;
@@ -35,8 +37,7 @@ class Auth_model extends CI_Model
 
 		$user_role = $this->check_role($result->ID, $email);
 
-		echo 'role : ' . $user_role;
-		if ($user_role !== 0) {
+		if ($user_role !== '0') {
 			$login_data = array(
 				'username' => $result->user_nicename,
 				'user_id' => $result->ID,
@@ -115,7 +116,7 @@ class Auth_model extends CI_Model
 			}
 		}
 
-		return '3';
+		return '0';
 	}
 
 	public function current_user()
