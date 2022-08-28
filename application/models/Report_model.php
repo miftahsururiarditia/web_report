@@ -63,10 +63,7 @@ class Report_model extends CI_Model {
 						CASE WHEN b.jenis_listing = 'Jual' THEN b.property_price ELSE '' END as grosscom_jual, 
 						CASE WHEN b.jenis_listing = 'Sewa' THEN b.property_price ELSE '' END as grosscom_sewa,
 						b.property_price as total, b.property_agent
-						FROM ( SELECT ID
-							FROM wpgy_posts
-							WHERE DATE(post_date) BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."' AND post_type = 'estate_property'
-						) a
+						FROM wpgy_posts a
 						LEFT JOIN (
 							SELECT post_id, MAX(CASE WHEN meta_key = 'property_address' THEN meta_value ELSE '' END) as property_address,
 							MAX(CASE WHEN meta_key = 'OrganisationalUnitName' THEN meta_value ELSE '' END) as organisational_unit_name,
@@ -80,7 +77,7 @@ class Report_model extends CI_Model {
 							GROUP BY post_id
 						) b ON a.ID = b.post_id
 						LEFT JOIN wpgy_users c ON b.property_agent = c.ID
-						WHERE c.user_nicename IS NOT NULL OR c.user_nicename <> '' $filter
+						WHERE DATE(a.post_date) BETWEEN '".$tgl_awal."' AND '".$tgl_akhir."' AND a.post_type = 'estate_property' AND c.user_nicename IS NOT NULL OR c.user_nicename <> '' $filter
 						ORDER BY c.user_nicename";
 		return $query;
 	}

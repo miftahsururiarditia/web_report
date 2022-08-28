@@ -52,7 +52,7 @@ class Report extends CI_Controller {
 		$count = $this->report_model->get_count_all_report_data($data['tgl_awal'], $data['tgl_akhir'], $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
 		$data['result'] = $result;
 
-		$config['base_url'] = site_url('/report?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
+		$config['base_url'] = site_url('/all_report?tgl_awal='.$data['tgl_awal'].'&tgl_akhir='.$data['tgl_akhir']);
 		$config['page_query_string'] = TRUE;
 		$config['total_rows'] = $count;
 		$config['per_page'] = $limit_per_page;
