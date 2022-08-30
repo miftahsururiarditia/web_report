@@ -66,6 +66,7 @@
                                 <th scope='col'>Harcourts</th>
                                 <th scope='col'>Career Path</th>
                                 <th scope='col'>Rank</th>
+                                <!-- <th scope='col'>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,7 @@
                                     <td><?php echo $key->harcourts; ?></td>
                                     <td><?php echo ""; ?></td>
                                     <td><?php echo ""; ?></td>
+                                    <!-- <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-idconsultant="<?php echo $key->sales_consultant_id; ?>" data-consultantname="<?php echo $key->sales_consultant; ?>">Edit</button></td> -->
                                 </tr>
                             <?php $i++; } ?>
                         </tbody>
@@ -87,6 +89,35 @@
             </div>
         </div>
     </div>
+
+    <!-- <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Sales Consultant</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="form-group">
+                <label for="sales-name" class="col-form-label">Sales Consultant Name:</label>
+                <input type="text" class="form-control" id="sales-name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="message-text" class="col-form-label">Career Path:</label>
+                <input type="text" class="form-control" id="career-path">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save</button>
+        </div>
+        </div>
+    </div>
+    </div> -->
 
     <?php $this->load->view('_partials/footer.php'); ?>
 

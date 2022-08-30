@@ -82,7 +82,7 @@
                                     <td><?php echo $key->alamat_property; ?></td>
                                     <td><?php echo $key->tipe_jual; ?></td>
                                     <td><?php echo $key->tipe_sewa; ?></td>
-                                    <td><?php echo $key->include_ppn; ?></td>
+                                    <td><?php echo is_numeric($key->include_ppn) ? number_format($key->include_ppn) : $key->include_ppn; ?></td>
                                 </tr>
                             <?php $i++; } ?>
                         </tbody>

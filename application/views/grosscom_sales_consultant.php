@@ -76,9 +76,9 @@
                                     <td><?php echo $i; ?></td>
                                     <td><?php echo $key->sales_consultant; ?></td>
                                     <td><?php echo $key->harcourts; ?></td>
-                                    <td><?php echo $key->grosscom_jual; ?></td>
-                                    <td><?php echo $key->grosscom_sewa; ?></td>
-                                    <td><?php echo $key->total; ?></td>
+                                    <td><?php echo is_numeric($key->grosscom_jual) ? number_format($key->grosscom_jual) : $key->grosscom_jual; ?></td>
+                                    <td><?php echo is_numeric($key->grosscom_sewa) ? number_format($key->grosscom_sewa) : $key->grosscom_sewa; ?></td>
+                                    <td><?php echo is_numeric($key->total) ? number_format($key->total) : $key->total; ?></td>
                                 </tr>
                             <?php $i++; } ?>
                         </tbody>

@@ -11,7 +11,7 @@ class Auth_model extends CI_Model
 			[
 				'field' => 'email',
 				'label' => 'Email',
-				'rules' => 'required|valid_email|max_length[32]',
+				'rules' => 'required|valid_email|max_length[128]',
 			],
 			[
 				'field' => 'pass',
@@ -27,12 +27,14 @@ class Auth_model extends CI_Model
 		$user = $this->db->get('wpgy_users');
 		$result = $user->row();
 
-		if (!password_verify($pass, $result->user_pass)) {
+		if (!$result) {
 			return false;
 		}
 
-		if (!$result) {
-			return false;
+		if (md5($pass) != $result->user_pass) {
+			if (!password_verify(md5($pass), $result->user_pass)) {
+				return false;
+			}
 		}
 
 		$user_role = $this->check_role($result->ID, $email);
@@ -51,7 +53,7 @@ class Auth_model extends CI_Model
 
 	function isAdmin($id)
 	{
-		$whitelist_admin = array('13185', '13187', '13461', '13597', '13985', '123456789000');
+		$whitelist_admin = array('13185', '13187', '13461', '13597', '13985', '123456789000', '14025', '13932', '13934');
 
 		if (in_array($id, $whitelist_admin, TRUE)) {
 			return true;

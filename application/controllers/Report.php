@@ -279,7 +279,7 @@ class Report extends CI_Controller {
 		$sheet->mergeCells('AC4:AG4');
 		$sheet->mergeCells('AC5:AG5');
 		$sheet->setCellValue('AC6', "Royalti");
-		$sheet->setCellValue('AD6', "PPN (10%)");
+		$sheet->setCellValue('AD6', "PPN (11%)");
 		$sheet->setCellValue('AE6', "PPh 23 (15%)");
 		$sheet->mergeCells('AC6:AC7');
 		$sheet->mergeCells('AD6:AD7');
@@ -376,13 +376,13 @@ class Report extends CI_Controller {
 			$sheet->setCellValue('U'.$numrow, '');
 			$sheet->setCellValue('V'.$numrow, '');
 			$sheet->setCellValue('W'.$numrow, '');
-			$sheet->setCellValue('X'.$numrow, '');
+			$sheet->setCellValue('X'.$numrow, '=+S'.$numrow.'*T'.$numrow);
 			$sheet->setCellValue('Y'.$numrow, '');
 			$sheet->setCellValue('Z'.$numrow, '=+X'.$numrow.'+Y'.$numrow);
-			$sheet->setCellValue('AA'.$numrow, '=+X'.$numrow.'*2%');
+			$sheet->setCellValue('AA'.$numrow, '=-X'.$numrow.'*2%');
 			$sheet->setCellValue('AB'.$numrow, '=+Z'.$numrow.'+AA'.$numrow);
 			$sheet->setCellValue('AC'.$numrow, '=+AB'.$numrow.'*9%');
-			$sheet->setCellValue('AD'.$numrow, '=+AC'.$numrow.'*10%');
+			$sheet->setCellValue('AD'.$numrow, '=+AC'.$numrow.'*11%');
 			$sheet->setCellValue('AE'.$numrow, '=-AC'.$numrow.'*15%');
 			$sheet->setCellValue('AF'.$numrow, '');
 			$sheet->setCellValue('AG'.$numrow, '=+AC'.$numrow.'+AD'.$numrow.'+AE'.$numrow);
@@ -410,34 +410,34 @@ class Report extends CI_Controller {
 		}
 
 		$sheet->setCellValue('D'.++$numrow, 'Total');
-		$sheet->setCellValue('K'.$numrow, '=SUM(K8:K'.$numrow.')');
-		$sheet->setCellValue('L'.$numrow, '=SUM(L8:L'.$numrow.')');
-		$sheet->setCellValue('S'.$numrow, '=SUM(S8:S'.$numrow.')');
-		$sheet->setCellValue('U'.$numrow, '=SUM(U8:U'.$numrow.')');
-		$sheet->setCellValue('V'.$numrow, '=SUM(V8:V'.$numrow.')');
-		$sheet->setCellValue('W'.$numrow, '=SUM(W8:W'.$numrow.')');
-		$sheet->setCellValue('X'.$numrow, '=SUM(X8:X'.$numrow.')');
-		$sheet->setCellValue('Y'.$numrow, '=SUM(Y8:Y'.$numrow.')');
-		$sheet->setCellValue('Z'.$numrow, '=SUM(Z8:Z'.$numrow.')');
-		$sheet->setCellValue('AA'.$numrow, '=SUM(AA8:AA'.$numrow.')');
-		$sheet->setCellValue('AB'.$numrow, '=SUM(AB8:AB'.$numrow.')');
-		$sheet->setCellValue('AC'.$numrow, '=SUM(AC8:AC'.$numrow.')');
-		$sheet->setCellValue('AD'.$numrow, '=SUM(AD8:AD'.$numrow.')');
-		$sheet->setCellValue('AE'.$numrow, '=SUM(AE8:AE'.$numrow.')');
-		$sheet->setCellValue('AF'.$numrow, '=SUM(AF8:AF'.$numrow.')');
-		$sheet->setCellValue('AG'.$numrow, '=SUM(AG8:AG'.$numrow.')');
+		$sheet->setCellValue('K'.$numrow, '=SUM(K8:K'.intval($numrow-2).')');
+		$sheet->setCellValue('L'.$numrow, '=SUM(L8:L'.intval($numrow-2).')');
+		$sheet->setCellValue('S'.$numrow, '=SUM(S8:S'.intval($numrow-2).')');
+		$sheet->setCellValue('U'.$numrow, '=SUM(U8:U'.intval($numrow-2).')');
+		$sheet->setCellValue('V'.$numrow, '=SUM(V8:V'.intval($numrow-2).')');
+		$sheet->setCellValue('W'.$numrow, '=SUM(W8:W'.intval($numrow-2).')');
+		$sheet->setCellValue('X'.$numrow, '=SUM(X8:X'.intval($numrow-2).')');
+		$sheet->setCellValue('Y'.$numrow, '=SUM(Y8:Y'.intval($numrow-2).')');
+		$sheet->setCellValue('Z'.$numrow, '=SUM(Z8:Z'.intval($numrow-2).')');
+		$sheet->setCellValue('AA'.$numrow, '=SUM(AA8:AA'.intval($numrow-2).')');
+		$sheet->setCellValue('AB'.$numrow, '=SUM(AB8:AB'.intval($numrow-2).')');
+		$sheet->setCellValue('AC'.$numrow, '=SUM(AC8:AC'.intval($numrow-2).')');
+		$sheet->setCellValue('AD'.$numrow, '=SUM(AD8:AD'.intval($numrow-2).')');
+		$sheet->setCellValue('AE'.$numrow, '=SUM(AE8:AE'.intval($numrow-2).')');
+		$sheet->setCellValue('AF'.$numrow, '=SUM(AF8:AF'.intval($numrow-2).')');
+		$sheet->setCellValue('AG'.$numrow, '=SUM(AG8:AG'.intval($numrow-2).')');
 		$sheet->getStyle('D'.$numrow.':AG'.$numrow)->getFont()->setBold(true);
 		
 		$sheet2->setCellValue('C'.$numrow2, 'Total');
-		$sheet2->setCellValue('D'.$numrow2, '=SUM(D6:D'.$numrow2.')');
-		$sheet2->setCellValue('E'.$numrow2, '=SUM(E6:E'.$numrow2.')');
-		$sheet2->setCellValue('F'.$numrow2, '=SUM(F6:F'.$numrow2.')');
+		$sheet2->setCellValue('D'.$numrow2, '=SUM(D6:D'.intval($numrow2-1).')');
+		$sheet2->setCellValue('E'.$numrow2, '=SUM(E6:E'.intval($numrow2-1).')');
+		$sheet2->setCellValue('F'.$numrow2, '=SUM(F6:F'.intval($numrow2-1).')');
 		$sheet2->getStyle('C'.$numrow2.':F'.$numrow2)->getFont()->setBold(true);
 		
 		$sheet3->setCellValue('C'.$numrow3, 'Total');
-		$sheet3->setCellValue('D'.$numrow3, '=SUM(D9:D'.$numrow3.')');
-		$sheet3->setCellValue('E'.$numrow3, '=SUM(E9:E'.$numrow3.')');
-		$sheet3->setCellValue('F'.$numrow3, '=SUM(F9:F'.$numrow3.')');
+		$sheet3->setCellValue('D'.$numrow3, '=SUM(D9:D'.intval($numrow3-1).')');
+		$sheet3->setCellValue('E'.$numrow3, '=SUM(E9:E'.intval($numrow3-1).')');
+		$sheet3->setCellValue('F'.$numrow3, '=SUM(F9:F'.intval($numrow3-1).')');
 		$sheet3->getStyle('C'.$numrow3.':F'.$numrow3)->getFont()->setBold(true);
 		
 		// Set orientasi kertas jadi LANDSCAPE
