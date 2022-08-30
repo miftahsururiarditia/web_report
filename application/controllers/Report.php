@@ -350,6 +350,15 @@ class Report extends CI_Controller {
 		$no3 = 1;
 		$numrow3 = 9;
 
+		$no4 = 1;
+		$numrow4 = 5;
+
+		$no5 = 1;
+		$numrow5 = 5;
+
+		$no6 = 1;
+		$numrow6 = 5;
+
 		// $row = $this->report_model->count_data_export();
 		// $sheet->insertNewRowBefore($numrow, $row);
 		foreach($datum as $data) {
@@ -443,6 +452,30 @@ class Report extends CI_Controller {
 		// Set orientasi kertas jadi LANDSCAPE
 		// $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
 		
+		$datum_ina_office_revenue = $this->report_model->get_data_ina_office_revenue($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		foreach($datum_ina_office_revenue as $data_revenue) {
+			$sheet4->setCellValue('A'.$numrow4, $data_revenue->harcourts);
+			$sheet4->setCellValue('B'.$numrow4, "");
+			$numrow4++;
+		}
+
+		$datum_ina_sales_consultant = $this->report_model->get_data_ina_sales_consultant($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		foreach($datum_ina_sales_consultant as $data_consultant) {
+			$sheet5->setCellValue('A'.$numrow5, $data_consultant->sales_consultant);
+			$sheet5->setCellValue('B'.$numrow5, $data_consultant->harcourts);
+			$sheet5->setCellValue('C'.$numrow5, "");
+			$sheet5->setCellValue('D'.$numrow5, "");
+			$numrow5++;
+		}
+
+		$datum_ina_pincipal = $this->report_model->get_data_ina_principal_report($tgl_awal, $tgl_akhir, TRUE, $this->ROLE_ID, $this->USER_ID, $this->USER_NAME);
+		foreach($datum_ina_pincipal as $data_principal) {
+			$sheet6->setCellValue('A'.$numrow6, "");
+			$sheet6->setCellValue('B'.$numrow6, $data_principal->harcourts);
+			$sheet6->setCellValue('C'.$numrow6, "");
+			$numrow6++;
+		}
+
 		// Set judul file excel nya
 		$sheet->setTitle("All Report");
 		$sheet2->setTitle("GrossCom Sales Consultant");
